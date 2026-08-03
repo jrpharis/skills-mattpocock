@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Scaffold the per-repo configuration that the engineering skills assume:
 
-- **Issue tracker** — where issues live (GitHub by default; local markdown is also supported out of the box)
+- **Issue tracker** — where issues live (GitHub, GitLab, Shortcut, or local markdown out of the box), plus the code host's pull-request surface when the two are different systems
 - **Triage labels** — the strings used for the five canonical triage roles
 - **Domain docs** — where `CONTEXT.md` and ADRs live, and the consumer rules for reading them
 
@@ -20,7 +20,7 @@ This is a prompt-driven skill, not a deterministic script. Explore, present what
 
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
-- `git remote -v` and `.git/config` — is this a GitHub repo? Which one?
+- `git remote -v` and `.git/config` — which host, and which repo? GitHub and GitLab remotes are obvious; Azure DevOps appears as `ssh.dev.azure.com:v3/<org>/<project>/<repo>`, `https://dev.azure.com/<org>/<project>/_git/<repo>`, or the older `<org>.visualstudio.com`. The remote identifies the **code host**, which is not automatically the issue tracker — see the next bullet.
 - Shortcut signals — a `git remote` can't reveal Shortcut, since the code host and the tracker are separate systems. Look for **repo-local** evidence: `sc-<id>` prefixes in recent branch names (`git branch -a`) or `git log` subjects, and `SHORTCUT_API_TOKEN` in `.env.example` or the repo's env files. A Shortcut MCP server merely being available to you is **not** repo-local evidence — it's attached to the user's whole session and says nothing about this repo.
 - `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Is there already an `## Agent skills` section in either?
 - `CONTEXT.md` and `CONTEXT-MAP.md` at the repo root
@@ -49,6 +49,8 @@ Default posture: these skills were designed for GitHub. If a `git remote` points
 - **Other** (Jira, Linear, etc.) — ask the user to describe the workflow in one paragraph; the skill will record it as freeform prose
 
 Record the choice in `docs/agents/issue-tracker.md`. The GitHub and GitLab templates carry a "PRs as a request surface" flag, defaulted **off** — leave it off and don't raise it; a user who wants external PRs in the triage queue can flip the flag in the file later. The Shortcut template carries no such flag, because Shortcut isn't a code host and never holds PRs.
+
+**When the tracker isn't the code host.** GitHub and GitLab are both, so their templates cover PRs inline. A Shortcut (or other) tracker isn't, and the PR surface then belongs to whatever the `git remote` points at. If that remote is Azure DevOps, append [code-host-azure-devops.md](./code-host-azure-devops.md) to `docs/agents/issue-tracker.md` as-is — it's a section, not a tracker choice, and it supersedes the tracker template's own "Pull requests as a triage surface" section. Fill in its "Repo configuration" block: org, project, repo, the repository GUID from `repo_repository` (`list`), and which MCP domains the server was started with. Leave its PR flag **off** like the others. For a GitHub or GitLab remote under a non-native tracker, lift the PR recipes from that host's template instead.
 
 On Shortcut, also fill in the template's "Workspace configuration" block before you finish: ask for the workspace slug, then read the team and workflow states off the workspace itself (`workflows-list` / `workflows-get-default`) and pin which state means "closed" — most workspaces have several `done`-type states, and only the user knows which one means shipped.
 
@@ -111,6 +113,7 @@ Then write the docs files using the seed templates in this skill folder as a sta
 - [issue-tracker-gitlab.md](./issue-tracker-gitlab.md) — GitLab issue tracker
 - [issue-tracker-shortcut.md](./issue-tracker-shortcut.md) — Shortcut issue tracker
 - [issue-tracker-local.md](./issue-tracker-local.md) — local-markdown issue tracker
+- [code-host-azure-devops.md](./code-host-azure-devops.md) — Azure DevOps pull-request surface. Not a tracker choice: append it to `docs/agents/issue-tracker.md` when the chosen tracker isn't the code host and the remote is ADO
 - [triage-labels.md](./triage-labels.md) — label mapping (only if `triage` is installed)
 - [domain.md](./domain.md) — domain doc consumer rules + layout
 

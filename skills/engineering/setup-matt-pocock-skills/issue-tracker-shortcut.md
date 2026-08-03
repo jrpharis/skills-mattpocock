@@ -33,7 +33,7 @@ Fill these in once; skills read them instead of rediscovering them every run.
 
 ## Pull requests as a triage surface
 
-Not applicable — Shortcut is not a code host, so pull requests never appear in it and `/triage` should not go looking for them here. If this repo wants external PRs in the triage queue, that surface belongs to the code host: keep the `gh` / `glab` PR recipes from the GitHub or GitLab template alongside this file and flip that flag there.
+Not applicable — Shortcut is not a code host, so pull requests never appear in it and `/triage` should not go looking for them here. If this repo wants external PRs in the triage queue, that surface belongs to the code host, and its recipes live in a separate section of this file: `## Code host: Azure DevOps` from [code-host-azure-devops.md](./code-host-azure-devops.md), or the `gh` / `glab` PR recipes lifted from the GitHub or GitLab template. Flip the flag there, not here.
 
 ## When a skill says "publish to the issue tracker"
 

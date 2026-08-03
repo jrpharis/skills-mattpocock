@@ -27,6 +27,8 @@ Reach for it **once per repo, before the first use of any other engineering skil
 It leads each with a recommended answer you can accept in a word, and skips whatever it can already infer — so most runs are a couple of quick confirmations:
 
 - **Issue tracker** — where work is tracked, so `triage`/`to-spec`/`to-tickets` know whether to call `gh`, `glab`, reach for the Shortcut MCP server, write markdown under `.scratch/`, or follow a workflow you describe. GitHub, GitLab, Shortcut, local markdown, or other. (It proposes the one that matches your `git remote` — or Shortcut, when it spots Shortcut in your tooling, branch names, or environment, since your tracker and your code host aren't the same system there.)
+
+  On GitHub and GitLab those two *are* the same system, so one answer settles both. When they're split — Shortcut for tickets, Azure DevOps for the repo — the tracker doesn't own your pull requests, and setup records that surface separately from your remote: which org and project, and the traps worth knowing before an agent writes to a PR (ADO labels replace rather than merge, and no MCP server can mark a PR merged).
 - **Triage labels** — asked only if the `triage` skill is installed, and then just: keep the default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`)? Say no only if your tracker already uses other names, so `triage` applies real ones instead of creating duplicates.
 - **Domain docs** — assumed single-context (one `CONTEXT.md` + `docs/adr/` at the root), which fits almost every repo; it only raises a multi-context map when it spots monorepo signals.
 
@@ -35,7 +37,7 @@ The output is a set of files under `docs/agents/` — `issue-tracker.md`, `domai
 ## It's working if
 
 - `issue-tracker.md` and `domain.md` land under `docs/agents/` (plus `triage-labels.md` when `triage` is installed), and an `## Agent skills` section appears in your `CLAUDE.md` or `AGENTS.md`.
-- The tracker it proposes matches your real `git remote`, and the labels match strings that already exist in your repo.
+- The tracker it proposes matches where you actually track work, and the labels match strings that already exist in your repo. Where your tracker and your code host are different systems, `issue-tracker.md` describes both — and names your real org, project, and repo, not placeholders.
 - Afterwards, `triage` and `to-tickets` act on the right place with the right labels instead of asking or guessing.
 
 ## Where it fits
